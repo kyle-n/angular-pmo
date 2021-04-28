@@ -20,6 +20,8 @@ export function reducer(
     case ActionType.createOrderSuccess:
       const orders = [...state.orders, action.order];
       return {...state, orders, mostRecentOrder: action.order};
+    case ActionType.getOrdersSuccess:
+      return {...state, orders: action.orders};
     default:
       return state;
   }

@@ -44,7 +44,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   ) { 
     this.createdOrder = store.pipe(
       select('order'),
-      filter(orderState => Boolean(orderState)),
       select('mostRecentOrder') // normally you'd build a real selector
     );
     store.subscribe(console.log)

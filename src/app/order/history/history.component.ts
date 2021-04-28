@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService, Order } from '../order.service';
-import { Config } from '../../restaurant/restaurant.service';
+import { Order } from '../order.service';
 import * as io from 'socket.io-client';
 import { environment } from '../../../environments/environment';
+import { select, Store } from '@ngrx/store';
+import { GlobalState } from 'src/app/store/reducers';
+import { ActionType } from 'src/app/store/actions';
 
 interface Data<T> {
   value: Array<T>;
@@ -22,13 +24,18 @@ export class OrderHistoryComponent implements OnInit {
   socket: SocketIOClient.Socket;
 
   constructor(
-    private orderService: OrderService
+    private store: Store<GlobalState>
     ) { 
       this.socket = io(environment.apiUrl);
+
+      store.pipe(
+        select('order'),
+        select('orders')
+      ).subscribe((orders: Array<Order>) => this.orders.value = orders); // not the most ideal Rx way to do it, but integrating with existing project
     }
 
   ngOnInit() {
-    this.getOrders();
+    this.store.dispatch({ type: ActionType.getOrders });
 
     this.socket.on('orders created', (order: Order) => {
       this.orders.value.push(order);
@@ -43,12 +50,6 @@ export class OrderHistoryComponent implements OnInit {
     this.socket.on('orders removed', (order: Order) => {
       let orderIndex =  this.orders.value.findIndex(item => item._id === order._id);
       this.orders.value.splice(orderIndex, 1);
-    });
-  }
-
-  getOrders() {
-    this.orderService.getOrders().subscribe((res: Config<Order>) => {
-      this.orders.value = res.data;
     });
   }
 

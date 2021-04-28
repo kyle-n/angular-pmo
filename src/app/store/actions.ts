@@ -3,7 +3,9 @@ import { Order } from '../order/order.service';
 
 export enum ActionType {
   createOrder = 'createOrder',
-  createOrderSuccess = 'createOrderSuccess'
+  createOrderSuccess = 'createOrderSuccess',
+  getOrders = 'getOrders',
+  getOrdersSuccess = 'getOrdersSuccess'
 }
 
 export const createOrder = createAction(
@@ -14,4 +16,8 @@ export const createOrder = createAction(
 export const createOrderSuccess = createAction(
   ActionType.createOrderSuccess,
   props<{ order: Order }>()
+);
+
+export const getOrders = createAction(
+  ActionType.getOrders
 );

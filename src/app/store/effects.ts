@@ -18,6 +18,14 @@ export class OrderEffects {
     })
   );
 
+  @Effect()
+  getOrders$ = this.actions$.pipe(
+    ofType(ActionType.getOrders),
+    mergeMap(() => this.orderService.getOrders().pipe(
+      map((response: any) => ({ type: ActionType.getOrdersSuccess, orders: response.data }))
+    ))
+  );
+
   constructor(
     private actions$: Actions,
     private orderService: OrderService
