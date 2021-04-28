@@ -1,0 +1,17 @@
+import { createAction, props } from '@ngrx/store';
+import { Order } from '../order/order.service';
+
+export enum ActionType {
+  createOrder = 'createOrder',
+  createOrderSuccess = 'createOrderSuccess'
+}
+
+export const createOrder = createAction(
+  ActionType.createOrder,
+  props<{ order: Order }>()
+);
+
+export const createOrderSuccess = createAction(
+  ActionType.createOrderSuccess,
+  props<{ order: Order }>()
+);

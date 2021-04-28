@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
+import { StoreModule } from '@ngrx/store';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
@@ -37,6 +39,7 @@ import { OrderHistoryComponent } from './order/history/history.component';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    StoreModule.forRoot({}),
     TabsModule.forRoot()
   ],
   providers: [],

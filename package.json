@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "@ngrx/effects": "^7.4.0",
     "@ngrx/store": "^7.4.0",
     "@types/socket.io-client": "^1.4.32",
     "bootstrap": "4.2.1",
