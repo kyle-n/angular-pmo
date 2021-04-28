@@ -7,6 +7,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './store/reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { OrderEffects } from './store/effects';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,6 +43,7 @@ import { OrderHistoryComponent } from './order/history/history.component';
     HttpClientModule,
     ReactiveFormsModule,
     StoreModule.forRoot({order: reducer}),
+    EffectsModule.forRoot([OrderEffects]),
     TabsModule.forRoot()
   ],
   providers: [],

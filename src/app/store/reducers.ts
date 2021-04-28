@@ -4,10 +4,12 @@ import { ActionType } from "./actions";
 // obviously incomplete, just for this example
 export type GlobalState = {
   orders: Array<Order>
+  mostRecentOrder?: Order;
 }
 
 export const initialState: GlobalState = {
-  orders: []
+  orders: [],
+  mostRecentOrder: null
 };
 
 export function reducer(
@@ -17,7 +19,7 @@ export function reducer(
   switch (action.type) {
     case ActionType.createOrderSuccess:
       const orders = [...state.orders, action.order];
-      return {...state, orders};
+      return {...state, orders, mostRecentOrder: action.order};
     default:
       return state;
   }

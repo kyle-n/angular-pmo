@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Order, OrderService } from "../order/order.service";
 import { ActionType } from "./actions";
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { createOrder } from './actions';
 
 @Injectable()

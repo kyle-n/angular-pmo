@@ -1,6 +1,6 @@
 <div class="order-form">
-  <ng-container *ngIf="orderComplete; else showOrderForm">
-      <pmo-order-details [order]="completedOrder"></pmo-order-details>
+  <ng-container *ngIf="(createdOrder | async); else showOrderForm">
+      <pmo-order-details [order]="createdOrder | async"></pmo-order-details>
       <p><button (click)="startNewOrder()">
         Place another order</button></p>
   </ng-container>

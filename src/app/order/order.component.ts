@@ -5,7 +5,11 @@ import { FormGroup, FormBuilder, FormArray, AbstractControl } from '@angular/for
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { Restaurant } from '../restaurant/restaurant';
 import { OrderService, Order } from './order.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { GlobalState } from '../store/reducers';
+import { createOrder } from '../store/actions';
+import { filter } from 'rxjs/operators';
 
 
 function minLengthArray(min: number) {
@@ -27,17 +31,23 @@ export class OrderComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
   items: FormArray;
   orderTotal: number = 0.0;
-  completedOrder: Order;
-  orderComplete: boolean = false;
   orderProcessing: boolean = false;
+  createdOrder: Observable<Order | null>;
   private subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute, 
     private restaurantService: RestaurantService,
     private orderService: OrderService,
-    private formBuilder: FormBuilder 
+    private formBuilder: FormBuilder,
+    private store: Store<GlobalState>
   ) { 
+    this.createdOrder = store.pipe(
+      select('order'),
+      filter(orderState => Boolean(orderState)),
+      select('mostRecentOrder') // normally you'd build a real selector
+    );
+    store.subscribe(console.log)
   }
 
   ngOnInit() {
@@ -73,15 +83,14 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.orderProcessing = true;
-    this.orderService.createOrder(this.orderForm.value).subscribe((res: Order) => {
-      this.completedOrder = res;
-      this.orderComplete = true;
-      this.orderProcessing = false;
-    });
+    this.store.dispatch(createOrder({ order: this.orderForm.value }));
+    // this.orderService.createOrder(this.orderForm.value).subscribe((res: Order) => {
+    //   this.completedOrder = res;
+    //   this.orderProcessing = false;
+    // });
   }
 
   startNewOrder() {
-    this.orderComplete = false;
     this.createOrderForm();
   }
 
