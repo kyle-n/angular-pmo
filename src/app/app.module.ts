@@ -9,6 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducer } from './store/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { OrderEffects } from './store/effects';
+import { NgrxFormsModule } from 'ngrx-forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,6 +45,7 @@ import { OrderHistoryComponent } from './order/history/history.component';
     ReactiveFormsModule,
     StoreModule.forRoot({order: reducer}),
     EffectsModule.forRoot([OrderEffects]),
+    NgrxFormsModule,
     TabsModule.forRoot()
   ],
   providers: [],
