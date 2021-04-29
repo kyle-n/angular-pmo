@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { Restaurant } from '../restaurant/restaurant';
 import { Order } from './order.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { GlobalState } from '../store/reducers';
-import { createOrder } from '../store/actions';
+import { clearOrderForm, createOrder } from '../store/actions';
 import { FormGroupState } from 'ngrx-forms';
 import { map, take } from 'rxjs/operators';
 
@@ -17,14 +17,13 @@ import { map, take } from 'rxjs/operators';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.less']
 })
-export class OrderComponent implements OnInit, OnDestroy {
+export class OrderComponent implements OnInit {
   orderFormState$: Observable<FormGroupState<Order>>;
   restaurant: Restaurant;
   isLoading: boolean = true;
   orderTotal: number = 0.0;
   orderProcessing: boolean = false;
   createdOrder: Observable<Order | null>;
-  private subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute, 
@@ -42,6 +41,10 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.orderFormState$.subscribe(console.log)
   }
 
+  clearForm(): void {
+    this.store.dispatch(clearOrderForm());
+  }
+
   ngOnInit() {
     const slug = this.route.snapshot.paramMap.get('slug');
 
@@ -49,10 +52,6 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.restaurant = data;
       this.isLoading = false;      
     })
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   onChanges() {

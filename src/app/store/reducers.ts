@@ -39,6 +39,8 @@ export function reducer(
       return {...state, orders, mostRecentOrder: action.order};
     case ActionType.getOrdersSuccess:
       return {...state, orders: action.orders};
+    case ActionType.clearOrderForm:
+      return {...state, orderForm: initialOrderFormState};
     default:
       return state;
   }

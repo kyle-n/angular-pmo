@@ -43,6 +43,9 @@
             <button type="submit" [disabled]="formState.isInvalid || orderProcessing" class="btn">
               Place My Order!
             </button>
+            <button (click)="clearForm()" type="button" class="btn btn-link">
+              Clear
+            </button>
         </div>
       </form>
     </ng-container>

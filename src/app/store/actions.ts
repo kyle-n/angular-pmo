@@ -5,7 +5,8 @@ export enum ActionType {
   createOrder = 'createOrder',
   createOrderSuccess = 'createOrderSuccess',
   getOrders = 'getOrders',
-  getOrdersSuccess = 'getOrdersSuccess'
+  getOrdersSuccess = 'getOrdersSuccess',
+  clearOrderForm = 'clearOrderForm'
 }
 
 export const createOrder = createAction(
@@ -20,4 +21,8 @@ export const createOrderSuccess = createAction(
 
 export const getOrders = createAction(
   ActionType.getOrders
+);
+
+export const clearOrderForm = createAction(
+  ActionType.clearOrderForm
 );
