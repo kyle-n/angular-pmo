@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
@@ -43,6 +43,7 @@ import { OrderHistoryComponent } from './order/history/history.component';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     StoreModule.forRoot({order: reducer}),
     EffectsModule.forRoot([OrderEffects]),
     NgrxFormsModule,

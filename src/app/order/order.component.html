@@ -5,44 +5,46 @@
         Place another order</button></p>
   </ng-container>
   <ng-template #showOrderForm>
-    <h2>Order here</h2>
-    <form *ngIf="orderForm" [formGroup]="orderForm" (ngSubmit)="onSubmit()">
-      <tabset>
-        <tab heading="Lunch Menu">
-          <ul class="list-group" >
-            <pmo-menu-items [data]="restaurant.menu.lunch" formControlName="items"></pmo-menu-items>
-          </ul>
-        </tab>
-        <tab heading="Dinner menu">
-          <ul class="list-group" >
-            <pmo-menu-items [data]="restaurant.menu.dinner" formControlName="items"></pmo-menu-items>
-          </ul>
-        </tab>
-      </tabset>
-      <!-- <p *ngIf="!orderForm.controls.items.value.length" class="info text-error">Please choose an item</p> -->
-      <div class="form-group">
-        <label class="control-label">Name:</label>
-        <input name="name" type="text" class="form-control" formControlName="name">
-        <p>Please enter your name.</p>
-      </div>
-      <div class="form-group">
-        <label class="control-label">Address:</label>
-        <input name="address" type="text" class="form-control" formControlName="address">
-        <p class="help-text">Please enter your address.</p>
-      </div>
-      <div class="form-group">
-        <label class="control-label">Phone:</label>
-        <input name="phone" type="text" class="form-control" formControlName="phone">
-        <p class="help-text">Please enter your phone number.</p>
-      </div>
-      <div class="submit">
-        <h4>Total: ${{orderTotal}}</h4>
-          <div class="loading" *ngIf="orderProcessing"></div>
-          <button type="submit" [disabled]="!orderForm.valid || orderProcessing" class="btn">
-            Place My Order!
-          </button>
-      </div>
-    </form>
+    <ng-container *ngIf="(orderFormState$ | async) as formState">
+      <h2>Order here</h2>
+      <form *ngIf="restaurant" [ngrxFormState]="formState" (ngSubmit)="onSubmit()">
+        <tabset>
+          <tab heading="Lunch Menu">
+            <ul class="list-group" >
+              <pmo-menu-items [data]="restaurant.menu.lunch" [ngrxFormControlState]="formState.controls.items"></pmo-menu-items>
+            </ul>
+          </tab>
+          <tab heading="Dinner menu">
+            <ul class="list-group" >
+              <pmo-menu-items [data]="restaurant.menu.dinner" [ngrxFormControlState]="formState.controls.items"></pmo-menu-items>
+            </ul>
+          </tab>
+        </tabset>
+        <!-- <p *ngIf="!orderForm.controls.items.value.length" class="info text-error">Please choose an item</p> -->
+        <div class="form-group">
+          <label class="control-label">Name:</label>
+          <input name="name" type="text" class="form-control" [ngrxFormControlState]="formState.controls.name">
+          <p>Please enter your name.</p>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Address:</label>
+          <input name="address" type="text" class="form-control" [ngrxFormControlState]="formState.controls.address">
+          <p class="help-text">Please enter your address.</p>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Phone:</label>
+          <input name="phone" type="text" class="form-control" [ngrxFormControlState]="formState.controls.phone">
+          <p class="help-text">Please enter your phone number.</p>
+        </div>
+        <div class="submit">
+          <h4>Total: ${{orderTotal}}</h4>
+            <div class="loading" *ngIf="orderProcessing"></div>
+            <button type="submit" [disabled]="formState.isInvalid || orderProcessing" class="btn">
+              Place My Order!
+            </button>
+        </div>
+      </form>
+    </ng-container>
 </ng-template>
 </div>
 

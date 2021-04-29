@@ -1,23 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, FormArray, AbstractControl } from '@angular/forms';
 
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { Restaurant } from '../restaurant/restaurant';
-import { OrderService, Order } from './order.service';
+import { Order } from './order.service';
 import { Observable, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { GlobalState } from '../store/reducers';
 import { createOrder } from '../store/actions';
+import { FormGroupState } from 'ngrx-forms';
+import { map, take } from 'rxjs/operators';
 
-
-function minLengthArray(min: number) {
-  return (c: AbstractControl): {[key: string]: any} => {
-      if (c.value.length >= min)
-          return null;
-      return { 'minLengthArray': {valid: false }};
-  }
-}
 
 @Component({
   selector: 'pmo-order',
@@ -25,10 +18,9 @@ function minLengthArray(min: number) {
   styleUrls: ['./order.component.less']
 })
 export class OrderComponent implements OnInit, OnDestroy {
-  orderForm: FormGroup;
+  orderFormState$: Observable<FormGroupState<Order>>;
   restaurant: Restaurant;
   isLoading: boolean = true;
-  items: FormArray;
   orderTotal: number = 0.0;
   orderProcessing: boolean = false;
   createdOrder: Observable<Order | null>;
@@ -37,14 +29,17 @@ export class OrderComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute, 
     private restaurantService: RestaurantService,
-    private orderService: OrderService,
-    private formBuilder: FormBuilder,
     private store: Store<GlobalState>
   ) { 
     this.createdOrder = store.pipe(
       select('order'),
       select('mostRecentOrder') // normally you'd build a real selector
     );
+    this.orderFormState$ = store.pipe(
+      select('order'),
+      select('orderForm')
+    );
+    this.orderFormState$.subscribe(console.log)
   }
 
   ngOnInit() {
@@ -53,7 +48,6 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.restaurantService.getRestaurant(slug).subscribe((data:Restaurant) => {
       this.restaurant = data;
       this.isLoading = false;      
-      this.createOrderForm();
     })
   }
 
@@ -61,30 +55,20 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  createOrderForm() {
-    this.orderForm = this.formBuilder.group({
-      restaurant: [this.restaurant._id],
-      name: [null],
-      address:  [null],
-      phone: [null],
-      items: [[], minLengthArray(1)]
-    });
-    this.onChanges();
-  }
-
   onChanges() {
-    this.subscription = this.orderForm.get('items').valueChanges.subscribe(val => {
-      this.orderTotal = this.orderService.getTotal(val);
-    });
   }
 
   onSubmit() {
     this.orderProcessing = true;
-    this.store.dispatch(createOrder({ order: this.orderForm.value }));
+    this.orderFormState$.pipe(
+      take(1),
+      map(form => form.value)
+    ).subscribe(orderFormValue => {
+      this.store.dispatch(createOrder({ order: orderFormValue }));
+    })
   }
 
   startNewOrder() {
-    this.createOrderForm();
   }
 
 }
