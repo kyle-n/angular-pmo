@@ -44,7 +44,7 @@ export class MenuItemsComponent implements ControlValueAccessor {
   }
 
   toggleItem(item: Item) {
-    let index = this._value.indexOf(item);
+    const index = this._value.indexOf(item);
     if(index !== -1) {
       this._value.splice(index, 1)
     }
