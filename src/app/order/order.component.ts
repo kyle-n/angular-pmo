@@ -9,7 +9,6 @@ import { Observable, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { GlobalState } from '../store/reducers';
 import { createOrder } from '../store/actions';
-import { filter } from 'rxjs/operators';
 
 
 function minLengthArray(min: number) {
@@ -46,7 +45,6 @@ export class OrderComponent implements OnInit, OnDestroy {
       select('order'),
       select('mostRecentOrder') // normally you'd build a real selector
     );
-    store.subscribe(console.log)
   }
 
   ngOnInit() {
@@ -83,10 +81,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.orderProcessing = true;
     this.store.dispatch(createOrder({ order: this.orderForm.value }));
-    // this.orderService.createOrder(this.orderForm.value).subscribe((res: Order) => {
-    //   this.completedOrder = res;
-    //   this.orderProcessing = false;
-    // });
   }
 
   startNewOrder() {
