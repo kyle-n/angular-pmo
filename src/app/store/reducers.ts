@@ -12,9 +12,9 @@ export type GlobalState = {
 const ORDER_FORM_ID = 'order_form_id';
 const initialOrderFormState = createFormGroupState<Order>(ORDER_FORM_ID, {
   _id: '',
-  name: '',
-  address: '',
-  phone: '',
+  name: null,
+  address: null,
+  phone: null,
   status: '',
   items: []
 });
