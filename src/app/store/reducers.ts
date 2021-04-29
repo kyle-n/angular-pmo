@@ -1,15 +1,17 @@
-import { Order } from "../order/order.service";
+import { Item, Order } from "../order/order.service";
 import { ActionType } from "./actions";
 
 // obviously incomplete, just for this example
 export type GlobalState = {
   orders: Array<Order>
   mostRecentOrder?: Order;
+  newOrder?: Order;
 }
 
 export const initialState: GlobalState = {
   orders: [],
-  mostRecentOrder: null
+  mostRecentOrder: null,
+  newOrder: null
 };
 
 export function reducer(
