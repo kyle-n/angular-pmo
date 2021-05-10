@@ -21,7 +21,7 @@
             </ul>
           </tab>
         </tabset>
-        <p *ngIf="!formState.controls.items.value.length" class="info text-error">Please choose an item</p>
+        <p *ngIf="formState.controls.items.errors.required" class="info text-error">Please choose an item</p>
         <div class="form-group">
           <label class="control-label">Name:</label>
           <input name="name" type="text" class="form-control" [ngrxFormControlState]="formState.controls.name">
