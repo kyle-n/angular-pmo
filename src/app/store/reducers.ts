@@ -1,3 +1,4 @@
+import { ValidationErrors } from '@angular/forms';
 import { createFormGroupState, formGroupReducer, FormGroupState, updateGroup, validate } from "ngrx-forms";
 import { required } from 'ngrx-forms/validation';
 import { Order } from "../order/order.service";
@@ -20,6 +21,23 @@ const initialOrderFormState = createFormGroupState<Order>(ORDER_FORM_ID, {
   items: []
 });
 
+interface NoChrisValidationError<T> {
+  actual: T | null | undefined;
+}
+declare module 'ngrx-forms/src/state' {
+  interface ValidationErrors {
+    noChris?: NoChrisValidationError<any>
+  }
+}
+
+const noChris = (name: string | null | undefined): ValidationErrors => {
+  const errors: ValidationErrors = {};
+  if (name && name.toLowerCase() === 'chris') {
+    errors.noChris = 'No one named Chris!'
+  }
+  return errors;
+}
+
 export const initialState: GlobalState = {
   orders: [],
   mostRecentOrder: null,
@@ -27,7 +45,7 @@ export const initialState: GlobalState = {
 };
 
 const validateOrderForm = updateGroup<Order>({
-  name: validate(required),
+  name: validate(required, noChris),
   address: validate(required),
   phone: validate(required)
 });
