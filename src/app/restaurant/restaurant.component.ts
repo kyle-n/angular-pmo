@@ -65,7 +65,6 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   onChanges(): void {
     let state:string;
     let stateChanges = this.form.get('state').valueChanges.subscribe(val => {
-      console.log('state', state, val);
       if (val) {
         this.form.get('city').enable({
           onlySelf: true, 

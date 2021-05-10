@@ -38,7 +38,6 @@ export class OrderComponent implements OnInit {
       select('order'),
       select('orderForm')
     );
-    this.orderFormState$.subscribe(console.log)
   }
 
   clearForm(): void {
