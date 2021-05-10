@@ -8,7 +8,7 @@
     <ng-container *ngIf="(orderFormState$ | async) as formState">
       <h2>Order here</h2>
       <form *ngIf="restaurant" [ngrxFormState]="formState" (ngSubmit)="onSubmit()">
-        <!-- <tabset>
+        <tabset>
           <tab heading="Lunch Menu">
             <ul class="list-group" >
               <pmo-menu-items [data]="restaurant.menu.lunch" [ngrxFormControlState]="formState.controls.items"
@@ -20,7 +20,7 @@
               <pmo-menu-items [data]="restaurant.menu.dinner" [ngrxFormControlState]="formState.controls.items"></pmo-menu-items>
             </ul>
           </tab>
-        </tabset> -->
+        </tabset>
         <p *ngIf="!formState.controls.items.value.length" class="info text-error">Please choose an item</p>
         <div class="form-group">
           <label class="control-label">Name:</label>

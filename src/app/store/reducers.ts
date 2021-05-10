@@ -1,24 +1,27 @@
 import { ValidationErrors } from '@angular/forms';
-import { createFormGroupState, formGroupReducer, FormGroupState, updateGroup, validate } from "ngrx-forms";
+import { box, Boxed, createFormGroupState, formGroupReducer, FormGroupState, updateGroup, validate } from "ngrx-forms";
 import { required } from 'ngrx-forms/validation';
-import { Order } from "../order/order.service";
+import { Item, Order } from "../order/order.service";
 import { ActionType } from "./actions";
 
 // obviously incomplete, just for this example
 export type GlobalState = {
   orders: Array<Order>
   mostRecentOrder?: Order;
-  orderForm: FormGroupState<Order>;
+  orderForm: FormGroupState<OrderFormState>;
 }
 
+type Override<T1, T2> = Omit<T1, keyof T2> & T2;
+type OrderFormState = Override<Order, {items: Boxed<Array<Item>>}>;
+
 const ORDER_FORM_ID = 'order_form_id';
-const initialOrderFormState = createFormGroupState<Order>(ORDER_FORM_ID, {
+const initialOrderFormState = createFormGroupState<OrderFormState>(ORDER_FORM_ID, {
   _id: '',
   name: null,
   address: null,
   phone: null,
   status: '',
-  items: []
+  items: box([])
 });
 
 interface NoChrisValidationError<T> {
@@ -44,10 +47,11 @@ export const initialState: GlobalState = {
   orderForm: initialOrderFormState
 };
 
-const validateOrderForm = updateGroup<Order>({
+const validateOrderForm = updateGroup<OrderFormState>({
   name: validate(required, noChris),
   address: validate(required),
-  phone: validate(required)
+  phone: validate(required),
+  items: validate(required)
 });
 
 export function reducer(
