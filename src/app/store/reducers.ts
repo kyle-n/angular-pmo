@@ -1,4 +1,5 @@
-import { createFormGroupState, formGroupReducer, FormGroupState } from "ngrx-forms";
+import { createFormGroupState, formGroupReducer, FormGroupState, updateGroup, validate } from "ngrx-forms";
+import { required } from 'ngrx-forms/validation';
 import { Order } from "../order/order.service";
 import { ActionType } from "./actions";
 
@@ -25,11 +26,17 @@ export const initialState: GlobalState = {
   orderForm: initialOrderFormState
 };
 
+const validateOrderForm = updateGroup<Order>({
+  name: validate(required),
+  address: validate(required),
+  phone: validate(required)
+});
+
 export function reducer(
   state = initialState,
   action: any // normally this would be a union type of your action objects
 ): GlobalState {
-  const orderForm = formGroupReducer(state.orderForm, action);
+  const orderForm = validateOrderForm(formGroupReducer(state.orderForm, action));
   if (orderForm !== state.orderForm) {
     state = {...state, orderForm};
   }
