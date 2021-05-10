@@ -1,6 +1,14 @@
-import phoneUtil from 'google-libphonenumber';
+import {PhoneNumberUtil} from 'google-libphonenumber';
+
+const phoneUtil = PhoneNumberUtil.getInstance();
 
 async function isValidUSNumber(number: string): Promise<boolean> {
-  const usNumber = phoneUtil.parse(number, 'US');
-  return phoneUtil.isValidNumberForRegion(usNumber, 'US');
+  try {
+    const usNumber = phoneUtil.parse(number, 'US');
+    return phoneUtil.isValidNumberForRegion(usNumber, 'US');
+  } catch {
+    return false;
+  }
 }
+
+export default isValidUSNumber;

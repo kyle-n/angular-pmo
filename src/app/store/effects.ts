@@ -2,8 +2,11 @@ import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Order, OrderService } from "../order/order.service";
 import { ActionType } from "./actions";
-import { map, mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap, startWith, switchMap } from 'rxjs/operators';
 import { createOrder } from './actions';
+import {ClearAsyncErrorAction, isNgrxFormsAction, SetAsyncErrorAction, SetValueAction, StartAsyncValidationAction} from 'ngrx-forms';
+import { from } from 'rxjs';
+import isValidUSNumber from '../phone-validator';
 
 @Injectable()
 export class OrderEffects {
@@ -24,6 +27,21 @@ export class OrderEffects {
     mergeMap(() => this.orderService.getOrders().pipe(
       map((response: any) => ({ type: ActionType.getOrdersSuccess, orders: response.data }))
     ))
+  );
+
+  @Effect()
+  validatePhoneNumber$ = this.actions$.pipe(
+    ofType(SetValueAction.TYPE),
+    filter((formControlUpdate: SetValueAction<string>) => formControlUpdate.controlId === 'order_form_id.phone'),
+    switchMap(formControlUpdate => {
+      const errorKey = 'validPhone'
+      return from(isValidUSNumber(formControlUpdate.value)).pipe(
+        map(validPhone => {
+          return validPhone ? new ClearAsyncErrorAction(formControlUpdate.controlId, errorKey) : new SetAsyncErrorAction(formControlUpdate.controlId, errorKey, true);
+        }),
+        startWith(new StartAsyncValidationAction(formControlUpdate.controlId, errorKey))
+      );
+    })
   );
 
   constructor(
