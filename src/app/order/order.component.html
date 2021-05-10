@@ -40,7 +40,7 @@
         <div class="submit">
           <h4>Total: ${{orderTotal}}</h4>
             <div class="loading" *ngIf="orderProcessing"></div>
-            <button type="submit" [disabled]="formState.isInvalid || orderProcessing" class="btn">
+            <button type="submit" [disabled]="formState.isInvalid || formState.isValidationPending || orderProcessing" class="btn">
               Place My Order!
             </button>
             <button (click)="clearForm()" type="button" class="btn btn-link">
