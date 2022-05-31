@@ -3,7 +3,7 @@
   <form class="form" [formGroup]="form">
     <div class="form-group">
       <label>State</label>
-      <select class="formControl" formControlName="state">
+      <select data-test="pmo-restaurant__select--state" class="formControl" formControlName="state">
         <option value="" *ngIf="states.isPending">Loading...</option>
         <ng-container *ngIf="!states.isPending">
           <option value="">Choose a state</option>
@@ -13,7 +13,7 @@
     </div>
     <div class="form-group">
       <label>City</label>
-      <select class="formControl" formControlName="city">
+      <select data-test="pmo-restaurant__select--city" class="formControl" formControlName="city">
         <option value="" *ngIf="cities.isPending">Loading...</option>
         <ng-container *ngIf="!cities.isPending">
           <option value="">Choose a city</option>
@@ -40,7 +40,7 @@
         <span class="open-now">Open Now</span>
       </div>
 
-      <a class="btn" [routerLink]="['/restaurants', restaurant.slug]">
+      <a data-test="pmo-restaurant__button--details" class="btn" [routerLink]="['/restaurants', restaurant.slug]">
         Details
       </a>
       <br />

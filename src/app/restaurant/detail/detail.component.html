@@ -28,7 +28,7 @@
     Description for {{restaurant.name}}
   </p>
   <p class="order-link">
-    <a class="btn" [routerLink]="['/restaurants', restaurant.slug, 'order']">
+    <a data-test="pmo-restaurant-details__link--order" class="btn" [routerLink]="['/restaurants', restaurant.slug, 'order']">
       Order from {{restaurant.name}}
     </a>
   </p>

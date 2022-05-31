@@ -3,13 +3,13 @@
    <h1>place-my-order.com</h1>
    <ul>
      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-       <a routerLink="/" >Home</a>
+       <a data-test="pmo-header__link--home" routerLink="/" >Home</a>
      </li>
      <li [ngClass]="{'active' : rla.isActive} ">
-       <a routerLink="/restaurants" routerLinkActive #rla="routerLinkActive">Restaurants</a>
+       <a data-test="pmo-header__link--restaurant" routerLink="/restaurants" routerLinkActive #rla="routerLinkActive">Restaurants</a>
      </li>
      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-       <a routerLink="/order-history" >Order History</a>
+       <a  data-test="pmo-header__link--history" routerLink="/order-history" >Order History</a>
      </li>
    </ul>
   </nav>

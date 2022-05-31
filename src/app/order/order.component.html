@@ -22,23 +22,23 @@
       <!-- <p *ngIf="!orderForm.controls.items.value.length" class="info text-error">Please choose an item</p> -->
       <div class="form-group">
         <label class="control-label">Name:</label>
-        <input name="name" type="text" class="form-control" formControlName="name">
+        <input data-test="pmo-order__input--name" name="name" type="text" class="form-control" formControlName="name">
         <p>Please enter your name.</p>
       </div>
       <div class="form-group">
         <label class="control-label">Address:</label>
-        <input name="address" type="text" class="form-control" formControlName="address">
+        <input data-test="pmo-order__input--address" name="address" type="text" class="form-control" formControlName="address">
         <p class="help-text">Please enter your address.</p>
       </div>
       <div class="form-group">
         <label class="control-label">Phone:</label>
-        <input name="phone" type="text" pmoOnlyNumbers class="form-control" formControlName="phone">
+        <input data-test="pmo-order__input--phone" name="phone" type="text" pmoOnlyNumbers class="form-control" formControlName="phone">
         <p class="help-text">Please enter your phone number.</p>
       </div>
       <div class="submit">
         <h4>Total: {{orderTotal | currency}}</h4>
           <div class="loading" *ngIf="orderProcessing"></div>
-          <button type="submit" [disabled]="!orderForm.valid || orderProcessing" class="btn">
+          <button data-test="pmo-order__button--submit"  type="submit" [disabled]="!orderForm.valid || orderProcessing" class="btn">
             Place My Order!
           </button>
       </div>
