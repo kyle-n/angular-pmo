@@ -23,3 +23,17 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("getBySel", (selector, ...args) => {
+  return cy.get(`[data-test=${selector}]`, ...args);
+});
+
+Cypress.Commands.add("getBySelLike", (selector, ...args) => {
+  return cy.get(`[data-test*=${selector}]`, ...args);
+});
+
+Cypress.Commands.add("showRestaurantsFrom", (state, city) => {
+  cy.get("[data-test=pmo-home__button--choose").click();
+  cy.get("[data-test=pmo-restaurant__select--state]").select([state]);
+  cy.get("[data-test=pmo-restaurant__select--city]").select([city]);
+});
