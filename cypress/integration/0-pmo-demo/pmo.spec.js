@@ -36,4 +36,13 @@ describe("example pmo-app", () => {
       .find("[data-test=pmo-restaurant__button--details]")
       .click();
   });
+
+  it("fetches list of states items - GET", () => {
+    cy.request("/api/states").as("statesRequest");
+    cy.get("@statesRequest").then((states) => {
+      expect(states.status).to.eq(200);
+      assert.isArray(states.body.data, "States Response is an array");
+      expect(states.body.data).to.have.length(3);
+    });
+  });
 });
