@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 import { RestaurantService, Config, City, State } from './restaurant.service';
@@ -17,7 +17,7 @@ export interface Data<T> {
   styleUrls: ['./restaurant.component.less'],
 })
 export class RestaurantComponent implements OnInit, OnDestroy {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
 
   public restaurants: Data<Restaurant> = {
     value: [],
@@ -37,7 +37,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   constructor(
     private restaurantService: RestaurantService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) { }
 
   ngOnInit() {

@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, AbstractControl, Validators } from '@angular/forms';
 
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { Restaurant } from '../restaurant/restaurant';
 import { OrderService, Order, Item } from './order.service';
 import { Subject } from 'rxjs';
-import { takeUntil } from "rxjs/operators";
-import { ItemTotalPipe } from "../shared/item-total.pipe";
+import { takeUntil } from 'rxjs/operators';
+import { ItemTotalPipe } from '../shared/item-total.pipe';
 
 
 const minLengthArray = (min: number) => (c: AbstractControl): {[key: string]: any} | null => {
@@ -23,7 +23,7 @@ const minLengthArray = (min: number) => (c: AbstractControl): {[key: string]: an
   styleUrls: ['./order.component.less']
 })
 export class OrderComponent implements OnInit, OnDestroy {
-  orderForm!: FormGroup;
+  orderForm!: UntypedFormGroup;
   restaurant?: Restaurant;
   isLoading = true;
   orderTotal = 0.0;
@@ -36,7 +36,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private restaurantService: RestaurantService,
     private orderService: OrderService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private itemTotal: ItemTotalPipe,
   ) {
   }
