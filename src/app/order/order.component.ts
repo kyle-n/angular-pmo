@@ -23,7 +23,7 @@ const minLengthArray = (min: number) => (c: AbstractControl): {[key: string]: an
   styleUrls: ['./order.component.less']
 })
 export class OrderComponent implements OnInit, OnDestroy {
-  orderForm!: UntypedFormGroup;
+  orderForm?: UntypedFormGroup;
   restaurant?: Restaurant;
   isLoading = true;
   orderTotal = 0.0;
@@ -69,14 +69,14 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   onChanges() {
-    this.orderForm.get('items')?.valueChanges.pipe(takeUntil(this.unSubscribe)).subscribe((val: Item[]) => {
+    this.orderForm?.get('items')?.valueChanges.pipe(takeUntil(this.unSubscribe)).subscribe((val: Item[]) => {
       this.orderTotal = this.itemTotal.transform(val);
     });
   }
 
   onSubmit() {
     this.orderProcessing = true;
-    this.orderService.createOrder(this.orderForm.value).subscribe(newOrder => {
+    this.orderService.createOrder(this.orderForm?.value).subscribe(newOrder => {
       this.completedOrder = newOrder;
       this.orderComplete = true;
       this.orderProcessing = false;
