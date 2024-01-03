@@ -1,7 +1,7 @@
 <ng-container *ngIf="isLoading">
   <div class="loading"></div>
 </ng-container>
-<ng-container *ngIf="!isLoading && restaurant !== undefined">
+<ng-container *ngIf="!isLoading && restaurant">
   <div class="restaurant-header" [ngStyle]="{'background-image': 'url('+ getUrl(restaurant.images.banner) + ')'}">
   <div class="background">
     <h2>{{restaurant.name}}</h2>
