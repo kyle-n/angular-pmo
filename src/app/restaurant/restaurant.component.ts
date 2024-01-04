@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 import { RestaurantService, Config, City, State } from './restaurant.service';
@@ -17,7 +17,10 @@ export interface Data<T> {
   styleUrls: ['./restaurant.component.less'],
 })
 export class RestaurantComponent implements OnInit, OnDestroy {
-  form!: UntypedFormGroup;
+  form!: FormGroup<{
+    state: FormControl<string>;
+    city: FormControl<string>;
+  }>;
 
   public restaurants: Data<Restaurant> = {
     value: [],
@@ -37,20 +40,23 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   constructor(
     private restaurantService: RestaurantService,
-    private fb: UntypedFormBuilder
-  ) { }
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.createForm();
     this.states.isPending = true;
-    this.restaurantService.getStates().pipe(
-      takeUntil(this.unSubscribe),
-      tap((res: Config<State>) => {
-        this.states.value = res.data;
-        this.states.isPending = false;
-        this.form.get('state')?.enable();
-      })
-    ).subscribe();
+    this.restaurantService
+      .getStates()
+      .pipe(
+        takeUntil(this.unSubscribe),
+        tap((res: Config<State>) => {
+          this.states.value = res.data;
+          this.states.isPending = false;
+          this.form.get('state')?.enable();
+        })
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -59,7 +65,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   }
 
   createForm() {
-    this.form = this.fb.group({
+    this.form = this.fb.nonNullable.group({
       state: { value: '', disabled: true },
       city: { value: '', disabled: true },
     });
@@ -108,27 +114,33 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   getCities(state: string) {
     this.cities.isPending = true;
-    this.restaurantService.getCities(state).pipe(
-      takeUntil(this.unSubscribe),
-      tap((res: Config<City>) => {
-        this.cities.value = res.data;
-        this.cities.isPending = false;
-        this.form.get('city')?.enable({
-          onlySelf: true,
-          emitEvent: false
-        });
-      })
-    ).subscribe();
+    this.restaurantService
+      .getCities(state)
+      .pipe(
+        takeUntil(this.unSubscribe),
+        tap((res: Config<City>) => {
+          this.cities.value = res.data;
+          this.cities.isPending = false;
+          this.form.get('city')?.enable({
+            onlySelf: true,
+            emitEvent: false,
+          });
+        })
+      )
+      .subscribe();
   }
 
   getRestaurants(state: string, city: string) {
     this.restaurants.isPending = true;
-    this.restaurantService.getRestaurants(state, city).pipe(
-      takeUntil(this.unSubscribe),
-      tap((res: Config<Restaurant>) => {
-        this.restaurants.value = res.data;
-        this.restaurants.isPending = false;
-      })
-    ).subscribe();
+    this.restaurantService
+      .getRestaurants(state, city)
+      .pipe(
+        takeUntil(this.unSubscribe),
+        tap((res: Config<Restaurant>) => {
+          this.restaurants.value = res.data;
+          this.restaurants.isPending = false;
+        })
+      )
+      .subscribe();
   }
 }

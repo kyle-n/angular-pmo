@@ -17,21 +17,27 @@ export interface Order {
   items: Item[];
 }
 
+interface CreateOrderDto {
+  name: string;
+  address: string;
+  phone: string;
+  status?: string;
+  items: Item[];
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   getOrders() {
-    return this.httpClient.get('/api/orders') as Observable<Config<Order>>;
+    return this.httpClient.get<Config<Order>>('/api/orders');
   }
 
-  createOrder(order: Order): Observable<Order> {
-    const orderData = Object.assign({}, order);
-    orderData.status = 'new';
-    return this.httpClient.post('/api/orders', orderData) as Observable<Order>;
+  createOrder(order: CreateOrderDto): Observable<Order> {
+    const orderData = { ...order, status: 'new' };
+    return this.httpClient.post<Order>('/api/orders', orderData);
   }
 
   updateOrder(order: Order, action: string) {
@@ -43,5 +49,4 @@ export class OrderService {
   deleteOrder(id: string) {
     return this.httpClient.delete('/api/orders/' + id);
   }
-
 }
