@@ -7,7 +7,7 @@ import {Order} from "../order.service";
   styleUrls: ['./details.component.css']
 })
 export class OrderDetailsComponent implements OnInit {
-  @Input() order? : Order;
+  @Input({ required: true }) order!: Order;
 
   constructor() { }
 

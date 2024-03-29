@@ -1,29 +1,44 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  AbstractControl,
+  Validators,
+  FormGroup,
+  FormControl,
+} from '@angular/forms';
 
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { Restaurant } from '../restaurant/restaurant';
 import { OrderService, Order, Item } from './order.service';
 import { Subject } from 'rxjs';
-import { takeUntil } from "rxjs/operators";
-import { ItemTotalPipe } from "../shared/item-total.pipe";
+import { takeUntil } from 'rxjs/operators';
+import { ItemTotalPipe } from '../shared/item-total.pipe';
 
+interface OrderForm {
+  restaurant: FormControl<string | undefined>;
+  name: FormControl<string>;
+  address: FormControl<string>;
+  phone: FormControl<string>;
+  items: FormControl<Item[]>;
+}
 
-const minLengthArray = (min: number) => (c: AbstractControl): {[key: string]: any} | null => {
-  if (c.value.length >= min) {
-    return null;
-  }
-  return { minLengthArray: {valid: false }};
-};
+const minLengthArray =
+  (min: number) =>
+  (c: AbstractControl): { [key: string]: any } | null => {
+    if (c.value.length >= min) {
+      return null;
+    }
+    return { minLengthArray: { valid: false } };
+  };
 
 @Component({
   selector: 'pmo-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.less']
+  styleUrls: ['./order.component.less'],
 })
 export class OrderComponent implements OnInit, OnDestroy {
-  orderForm!: FormGroup;
+  orderForm?: FormGroup<OrderForm>;
   restaurant?: Restaurant;
   isLoading = true;
   orderTotal = 0.0;
@@ -37,9 +52,8 @@ export class OrderComponent implements OnInit, OnDestroy {
     private restaurantService: RestaurantService,
     private orderService: OrderService,
     private formBuilder: FormBuilder,
-    private itemTotal: ItemTotalPipe,
-  ) {
-  }
+    private itemTotal: ItemTotalPipe
+  ) {}
 
   ngOnInit() {
     const slug = this.route.snapshot.paramMap.get('slug') as string;
@@ -57,35 +71,42 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   createOrderForm() {
-    const restaurantId = this.restaurant && this.restaurant._id || null;
-    this.orderForm = this.formBuilder.group({
+    const restaurantId = this.restaurant && this.restaurant._id;
+    this.orderForm = this.formBuilder.nonNullable.group({
       restaurant: [restaurantId],
-      name: [null, Validators.required],
-      address:  [null, Validators.required],
-      phone: [null,  Validators.required],
-      items: [[], minLengthArray(1)]
+      name: ['', Validators.required],
+      address: ['', Validators.required],
+      phone: ['', Validators.required],
+      items: [[] as Item[], minLengthArray(1)],
     });
     this.onChanges();
   }
 
   onChanges() {
-    this.orderForm.get('items')?.valueChanges.pipe(takeUntil(this.unSubscribe)).subscribe((val: Item[]) => {
-      this.orderTotal = this.itemTotal.transform(val);
-    });
+    this.orderForm
+      ?.get('items')
+      ?.valueChanges.pipe(takeUntil(this.unSubscribe))
+      .subscribe((val: Item[]) => {
+        this.orderTotal = this.itemTotal.transform(val);
+      });
   }
 
   onSubmit() {
+    if (!this.orderForm?.valid) {
+      return;
+    }
     this.orderProcessing = true;
-    this.orderService.createOrder(this.orderForm.value).subscribe(newOrder => {
-      this.completedOrder = newOrder;
-      this.orderComplete = true;
-      this.orderProcessing = false;
-    });
+    this.orderService
+      .createOrder(this.orderForm.getRawValue())
+      .subscribe((newOrder) => {
+        this.completedOrder = newOrder;
+        this.orderComplete = true;
+        this.orderProcessing = false;
+      });
   }
 
   startNewOrder() {
     this.orderComplete = false;
     this.createOrderForm();
   }
-
 }
