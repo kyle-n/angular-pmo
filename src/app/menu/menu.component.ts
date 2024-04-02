@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'pmo-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.less']
+  styleUrls: ['./menu.component.css'],
 })
-export class MenuComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class MenuComponent {}
